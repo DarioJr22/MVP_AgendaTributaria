@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda Tributária - Receita Federal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #8ec200;
+            --secondary: #2c3c01;
+            --accent: #ff6b00;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            color: white;
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .notification-bell {
+            position: relative;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--accent);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .dashboard {
+            padding: 2rem 0;
+        }
+
+        .dashboard-header {
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-title {
+            font-size: 1.75rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .dashboard-subtitle {
+            color: var(--gray);
+            font-size: 1rem;
+        }
+
+        .filters {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .filter-group select,
+        .filter-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--light-gray);
+            border-radius: 6px;
+            font-size: 1rem;
+            background-color: var(--light);
+        }
+
+        .filter-group input {
+            padding-left: 40px;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 10px;
+            align-self: flex-end;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-header h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .card-date {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .card-category {
+            display: inline-block;
+            background-color: var(--light-gray);
+            color: var(--gray);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-description {
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .card-footer {
+            padding: 0 1.5rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .icon-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--light);
+            color: var(--dark);
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+        }
+
+        .icon-btn:hover {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .status-pending {
+            background-color: rgba(255, 193, 7, 0.2);
+            color: #d39e00;
+        }
+
+        .status-completed {
+            background-color: rgba(40, 167, 69, 0.2);
+            color: #218838;
+        }
+
+        .status-warning {
+            background-color: rgba(220, 53, 69, 0.2);
+            color: #bd2130;
+        }
+
+        .notification-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .modal-header h3 {
+            font-size: 1.25rem;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .notification-item {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+
+        .notification-message {
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .notification-time {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .ai-suggestion {
+            background-color: rgba(42, 124, 199, 0.1);
+            border-left: 4px solid var(--secondary);
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .ai-suggestion h4 {
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ai-suggestion p {
+            color: var(--dark);
+        }
+
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 2rem;
+        }
+
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .footer-section h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--light);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            color: #adb5bd;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .filters {
+                flex-direction: column;
+            }
+            
+            .filter-group {
+                width: 100%;
+            }
+            
+            .filter-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Cabeçalho -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    <h1>Agenda Tributária</h1>
+                </div>
+                <div class="notification-bell" id="notificationBell">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Dashboard Principal -->
+    <main class="dashboard">
+        <div class="container">
+            <div class="dashboard-header">
+                <h2 class="dashboard-title">Obrigações Tributárias</h2>
+                <p class="dashboard-subtitle">Acompanhe os prazos e obrigações da Receita Federal</p>
+            </div>
+
+            <!-- Filtros -->
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="category">Categoria</label>
+                    <select id="category">
+                        <option value="all">Todas as Categorias</option>
+                        <option value="federal">Federal</option>
+                        <option value="estadual">Estadual</option>
+                        <option value="municipal">Municipal</option>
+                        <option value="trabalhista">Trabalhista</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="status">Status</label>
+                    <select id="status">
+                        <option value="all">Todos os Status</option>
+                        <option value="pending">Pendente</option>
+                        <option value="warning">Atenção</option>
+                        <option value="completed">Concluído</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group search-box">
+                    <label for="search">Pesquisar</label>
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="search" placeholder="Digite para buscar...">
+                </div>
+                
+                <div class="filter-actions">
+                    <button class="btn btn-outline">
+                        <i class="fas fa-sync-alt"></i> Limpar
+                    </button>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-filter"></i> Filtrar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Cards de Obrigações -->
+            <div class="cards-grid" id="obligationsGrid">
+                <!-- Os cards serão gerados dinamicamente pelo JavaScript -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal de Notificações -->
+    <div class="notification-modal" id="notificationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Notificações</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="notification-item">
+                    <div class="notification-title">Nova obrigação tributária</div>
+                    <div class="notification-message">Declaração de Débitos e Créditos Tributários Federais (DCTF) vence em 5 dias</div>
+                    <div class="notification-time">Há 2 horas</div>
+                </div>
+                <div class="notification-item">
+                    <div class="notification-title">Atualização de sistema</div>
+                    <div class="notification-message">Nova versão do sistema disponível com melhorias na agenda tributária</div>
+                    <div class="notification-time">Ontem</div>
+                </div>
+                <div class="notification-item">
+                    <div class="notification-title">Alerta de vencimento</div>
+                    <div class="notification-message">Pagamento do Simples Nacional vence amanhã</div>
+                    <div class="notification-time">Há 3 dias</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rodapé -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Agenda Tributária</h3>
+                    <p>Solução para acompanhamento de obrigações fiscais e tributárias junto à Receita Federal do Brasil.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Links Rápidos</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-home"></i> Início</a></li>
+                        <li><a href="#"><i class="fas fa-calendar-alt"></i> Agenda</a></li>
+                        <li><a href="#"><i class="fas fa-bell"></i> Notificações</a></li>
+                        <li><a href="#"><i class="fas fa-cog"></i> Configurações</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contato</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-envelope"></i> contato@agendatributaria.com.br</li>
+                        <li><i class="fas fa-phone"></i> (11) 99999-9999</li>
+                        <li><i class="fas fa-map-marker-alt"></i> São Paulo, SP</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2023 Agenda Tributária. Todos os direitos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Dados simulados da agenda tributária
+        const obligationsData = [
+            {
+                id: 1,
+                title: "Declaração do Imposto de Renda",
+                date: "2023-04-30",
+                category: "federal",
+                description: "Entrega da declaração anual de ajuste do Imposto de Renda Pessoa Física.",
+                status: "completed",
+                icon: "fa-file-alt"
+            },
+            {
+                id: 22,
+                title: "SPED - Reinf - R-2055",
+                date: "2023-05-15",
+                category: "federal",
+                description: "Declaração de Débitos e Créditos Tributários Federais.",
+                status: "pending",
+                icon: "fa-chart-bar"
+            },
+            {
+                id: 10,
+                title: "SPED - Reinf - R-1000",
+                date: "2023-05-15",
+                category: "federal",
+                description: "Declaração de Débitos e Créditos Tributários Federais.",
+                status: "pending",
+                icon: "fa-chart-bar"
+            },{
+                id: 10,
+                title: "SPED - Reinf - R-1070",
+                date: "2023-05-15",
+                category: "federal",
+                description: "Declaração de Débitos e Créditos Tributários Federais.",
+                status: "pending",
+                icon: "fa-chart-bar"
+            },
+            {
+                id: 2,
+                title: "DCTF - Mensal",
+                date: "2023-05-15",
+                category: "federal",
+                description: "Declaração de Débitos e Créditos Tributários Federais.",
+                status: "pending",
+                icon: "fa-chart-bar"
+            },
+            {
+                id: 3,
+                title: "Pagamento do Simples Nacional",
+                date: "2023-05-20",
+                category: "federal",
+                description: "Pagamento mensal do Simples Nacional referente ao mês anterior.",
+                status: "warning",
+                icon: "fa-money-bill-wave"
+            },
+            {
+                id: 4,
+                title: "ICMS - Apuração",
+                date: "2023-05-10",
+                category: "estadual",
+                description: "Apuração e recolhimento do Imposto sobre Circulação de Mercadorias e Serviços.",
+                status: "pending",
+                icon: "fa-truck-loading"
+            },
+            {
+                id: 5,
+                title: "ISS - Apuração",
+                date: "2023-05-10",
+                category: "municipal",
+                description: "Apuração e recolhimento do Imposto Sobre Serviços.",
+                status: "pending",
+                icon: "fa-building"
+            },
+            {
+                id: 6,
+                title: "GFIP",
+                date: "2023-05-07",
+                category: "trabalhista",
+                description: "Guia do FGTS e de Informações à Previdência Social.",
+                status: "completed",
+                icon: "fa-users"
+            },
+            {
+                id: 7,
+                title: "DEFIS",
+                date: "2023-05-31",
+                category: "federal",
+                description: "Declaração de Informações Socioeconômicas e Fiscais.",
+                status: "pending",
+                icon: "fa-chart-pie"
+            },
+            {
+                id: 8,
+                title: "DIRF",
+                date: "2024-04-30",
+                category: "federal",
+                description: "Declaração do Imposto de Renda Retido na Fonte.",
+                status: "pending",
+                icon: "fa-percent"
+            }
+        ];
+
+        // Função para formatar a data
+        function formatDate(dateString) {
+            const options = { day: '2-digit', month: 'long', year: 'numeric' };
+            const date = new Date(dateString);
+            return date.toLocaleDateString('pt-BR', options);
+        }
+
+        // Função para renderizar os cards
+        function renderObligations(obligations) {
+            const grid = document.getElementById('obligationsGrid');
+            grid.innerHTML = '';
+            
+            obligations.forEach(obligation => {
+                let statusClass, statusText;
+                switch(obligation.status) {
+                    case 'pending':
+                        statusClass = 'status-pending';
+                        statusText = 'Pendente';
+                        break;
+                    case 'warning':
+                        statusClass = 'status-warning';
+                        statusText = 'Atenção';
+                        break;
+                    case 'completed':
+                        statusClass = 'status-completed';
+                        statusText = 'Concluído';
+                        break;
+                }
+                
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="card-header">
+                        <h3>${obligation.title}</h3>
+                        <span class="card-date">${formatDate(obligation.date)}</span>
+                    </div>
+                    <div class="card-body">
+                        <span class="card-category">${obligation.category.toUpperCase()}</span>
+                        <p class="card-description">${obligation.description}</p>
+                        <div class="ai-suggestion">
+                            <h4><i class="fas fa-robot"></i> Sugestão da IA</h4>
+                            <p>${getAiSuggestion(obligation)}</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="card-actions">
+                            <button class="icon-btn"><i class="fas fa-bell"></i></button>
+                            <button class="icon-btn"><i class="fas fa-edit"></i></button>
+                            <button class="icon-btn"><i class="fas fa-share-alt"></i></button>
+                        </div>
+                        <span class="status-badge ${statusClass}">${statusText}</span>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Função para gerar sugestões da IA baseadas na obrigação
+        function getAiSuggestion(obligation) {
+            const suggestions = {
+                pending: [
+                    "Recomendamos iniciar o processo com antecedência para evitar atrasos.",
+                    "Verifique se todos os documentos necessários estão disponíveis.",
+                    "Considere automatizar este processo para economizar tempo no futuro."
+                ],
+                warning: [
+                    "Esta obrigação está próxima do vencimento. Priorize sua conclusão.",
+                    "Atrasos podem gerar multas e juros. Recomendamos ação imediata.",
+                    "Verifique se há pendências que possam atrasar o cumprimento desta obrigação."
+                ],
+                completed: [
+                    "Parabéns por cumprir esta obrigação dentro do prazo!",
+                    "Recomendamos manter registros organizados para eventuais auditorias.",
+                    "Analise os dados desta obrigação para identificar oportunidades de melhoria."
+                ]
+            };
+            
+            const randomIndex = Math.floor(Math.random() * suggestions[obligation.status].length);
+            return suggestions[obligation.status][randomIndex];
+        }
+
+        // Função para filtrar as obrigações
+        function filterObligations() {
+            const categoryFilter = document.getElementById('category').value;
+            const statusFilter = document.getElementById('status').value;
+            const searchFilter = document.getElementById('search').value.toLowerCase();
+            
+            const filtered = obligationsData.filter(obligation => {
+                const matchesCategory = categoryFilter === 'all' || obligation.category === categoryFilter;
+                const matchesStatus = statusFilter === 'all' || obligation.status === statusFilter;
+                const matchesSearch = obligation.title.toLowerCase().includes(searchFilter) || 
+                                      obligation.description.toLowerCase().includes(searchFilter);
+                
+                return matchesCategory && matchesStatus && matchesSearch;
+            });
+            
+            renderObligations(filtered);
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Renderizar dados iniciais
+            renderObligations(obligationsData);
+            
+            // Configurar filtros
+            document.getElementById('category').addEventListener('change', filterObligations);
+            document.getElementById('status').addEventListener('change', filterObligations);
+            document.getElementById('search').addEventListener('input', filterObligations);
+            
+            // Botão de limpar filtros
+            document.querySelector('.btn-outline').addEventListener('click', function() {
+                document.getElementById('category').value = 'all';
+                document.getElementById('status').value = 'all';
+                document.getElementById('search').value = '';
+                renderObligations(obligationsData);
+            });
+            
+            // Botão de filtrar
+            document.querySelector('.btn-primary').addEventListener('click', filterObligations);
+            
+            // Notificações
+            document.getElementById('notificationBell').addEventListener('click', function() {
+                document.getElementById('notificationModal').style.display = 'flex';
+            });
+            
+            // Fechar modal
+            document.querySelector('.close-modal').addEventListener('click', function() {
+                document.getElementById('notificationModal').style.display = 'none';
+            });
+            
+            // Fechar modal ao clicar fora
+            window.addEventListener('click', function(event) {
+                if (event.target === document.getElementById('notificationModal')) {
+                    document.getElementById('notificationModal').style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
